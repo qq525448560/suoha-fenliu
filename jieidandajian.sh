@@ -97,12 +97,53 @@ cat>xray/config.json<<EOF
 		}
 	],
 	"outbounds": [
-		{
-			"protocol": "freedom",
-			"settings": {}
-		}
-	]
+  {
+    "protocol": "freedom",
+    "tag": "direct",
+    "settings": {}
+  },
+  {
+    "protocol": "vmess",
+    "tag": "proxy",
+    "settings": {
+      "vnext": [
+        {
+          "address": "172.233.171.224",
+          "port": 16416,
+          "users": [
+            {
+              "id": "8c1b9bea-cb51-43bb-a65c-0af31bbbf145",
+              "alterId": 0,
+              "security": "auto"
+            }
+          ]
+        }
+      ]
+    }
+  }
+],
+"routing": {
+  "domainStrategy": "AsIs",
+  "rules": [
+    {
+      "type": "field",
+      "domain": [
+        "youtube.com",
+        "googlevideo.com",
+        "chat.openai.com",
+        "openai.com"
+      ],
+      "outboundTag": "proxy"
+    },
+    {
+      "type": "field",
+      "outboundTag": "direct",
+      "domain": ["geosite:cn"],
+      "ip": ["geoip:cn"]
+    }
+  ]
 }
+
 EOF
 fi
 if [ $protocol == 2 ]
